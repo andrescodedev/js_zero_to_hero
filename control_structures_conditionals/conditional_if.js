@@ -1,30 +1,44 @@
 /* 
-    CONDITIONAL IF
+    IF CONDITIONAL
 */
 
 let user = {
     name:'andrew',
-    age:25,
-    private_subscription:true,
-    public_subscription:true
+    age:17,
+    gold_subscription:true,
+    silver_subscription:true
 };
 
-if(user.private_subscription === true) {
+/* 
+if(user.gold_subscription === true) {
     console.log(`Welcome sr ${user.name}`);
-}
+} */
 
 
 /* 
-    IF ELSE CONDITIONAL
+    ELSE IF CONDITIONAL
 */
-let age_allowed = 20;
-let public_subscription = true;
+/*let age_allowed = 20;
 
-if(user.private_subscription === true) {
-    if(user.age > 18) {
-        console.log(`Enjoy your private dance and liquors`);
-    }
+if(user.gold_subscription === true && user.age > 18) {
+    console.log(`Werlcome sr ${user.name}, enjoy your private dance and liquors`);
     
-} else if(user.public_subscription) {
-    console.log(`Maybe another year`);
+} else if(user.silver_subscription === true && user.age > 18) {
+    console.log(`Werlcome sr ${user.name}, enjoy the party and liquors`);
+} else {
+    console.log(`Sorry sr, maybe another year`);
+}*/
+
+//CODE REFACTORING
+if(user.age >= 18) {
+    if(user.gold_subscription === true) {
+        console.log(`Werlcome sr ${user.name}, enjoy your private dance and liquors`);
+    } else if(user.silver_subscription === true) {
+        console.log(`Werlcome sr ${user.name}, enjoy the party and liquors`);
+    } else {
+        console.log(`Sorry sr ${user.name}, you need to buy a subscription.`);
+    }
+
+} else {
+    console.log(`Sorry ${user.name}, you must be legal age.`);
 }
