@@ -51,3 +51,22 @@ for(let client = 0; client < user_list.length; client++) {
     }
 
 }
+
+// EXPRESSION 1 (variables)
+//Form 1 - Without expression 1
+/*let client = 0;
+for(;client < user_list.length; client++) {
+    console.log(user_list[client]);
+}*/
+
+// Form 2 - You can initiate many values in expression 1 (separated by comma)
+/*for(professions = 0, jobs = ['dev','arch','qa']; professions < jobs.length; professions++) {
+    console.log(jobs[professions]);
+}*/
+
+// EXPRESSION 3 (increases)
+//Form 1 - Without expression 3
+/*for(professions = 0, jobs = ['dev','arch','qa']; professions < jobs.length;) {
+    console.log(jobs[professions]);
+    professions++;
+}*/
