@@ -68,12 +68,32 @@ console.log(`His name is ${getName}`);*/
 /* 
    THE FUNCTIONS HAS PROPERTIES AND METHODS - EXECUTION CONTEXT
 
-   let obj = {}
-   function a(){}}
+   let obj = {
+        propertyA:valueA,
+        propertyB:valueB
+   }
+
+   function a(){
+        console.log(`${this.propertyA} ${this.propertyB}`);
+   }
 
    a.call(obj)
    
 */
+
+/* EXAMPLE - EXECUTION CONTEXT
+
+let person = {
+    name:'Andrew',
+    lastName:'Ronaldo',
+    profession:'Developer'
+}
+
+function printPersonDataOnConsole() {
+    console.log(`My name in ${this.name} ${this.lastName} and my profession is ${this.profession}`);
+}
+
+printPersonDataOnConsole.call(person);*/
 
 
 /* 
