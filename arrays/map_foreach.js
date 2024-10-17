@@ -14,6 +14,8 @@ console.log(pairNumbers);
 console.log(potentiationNumbers);
 
 //forEach() --> Performs the specified action for each element in an array.
-let undefinedResult = pairNumbers.forEach(element => console.log(element - 1));
+let sumOddNumbers = 0;
+let undefinedResult = pairNumbers.forEach(element => sumOddNumbers += (element-1));
 console.log(pairNumbers);
 console.log(undefinedResult);
+console.log(sumOddNumbers);
