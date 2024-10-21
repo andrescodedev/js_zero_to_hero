@@ -33,6 +33,12 @@ class Store {
     setAddresses(addresses) {
         this.addresses = addresses;
     }
+
+    storePresentation() {
+        return `Store Name: ${this.name}\nAddress: ${this.addresses.address}
+District: ${this.addresses.district}\nPhone: ${this.phones.mobilePhone}
+whatsapp: ${this.phones.whatsApp}`;
+    }
 }
 
 class ClothingStore  extends Store {
@@ -57,6 +63,11 @@ class ClothingStore  extends Store {
 
     setSizes(sizes) {
         this.sizes = sizes;
+    }
+
+    storePresentation() {
+        return `${super.storePresentation()}
+Clothing Type: ${this.clothingType}\nClothing Sizes: ${this.sizes}`;
     }
 }
 
@@ -90,6 +101,17 @@ class PetStore extends Store {
     setPetServices(petServices) {
         this.petServices = petServices;
     }
+
+    storePresentation() {
+        return `${super.storePresentation()}
+Our Services: ${this.petServices}`;
+    }
+}
+
+class ConsolePrint {
+    consolePrint(store) {
+        console.log(store.storePresentation());
+    }
 }
 
 const clothingStore = new ClothingStore(
@@ -98,8 +120,19 @@ const clothingStore = new ClothingStore(
     {district:'Carmelo',address:'calle 6'},null,
     'Clothing','Deportiva',['s','m','l','xl']);
 
-console.log(clothingStore);
-console.log(clothingStore.getPhones());
+const petStore = new PetStore(
+    'Dog and Cat',null,null,
+    {whatsApp:'3147539514'},
+    {district:'Albergue',address:'Calle 1 sur'},
+    null,'Mascotas',
+    ['Peluqueria','Baño','Veterinaria']
+);
 
-clothingStore.setPhones({whatsApp: '3174569636'});
+const consolePrint = new ConsolePrint();
+consolePrint.consolePrint(petStore);
+
+/*console.log(clothingStore);
 console.log(clothingStore.getPhones());
+clothingStore.setPhones({whatsApp: '3174569636'});
+console.log(clothingStore.getPhones());*/
+
