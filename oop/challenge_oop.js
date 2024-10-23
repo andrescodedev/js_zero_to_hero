@@ -9,8 +9,6 @@
        DE ERROR Y NO MOSTRAR NINGUNA TIMELINE.
 */
 
-const PromptSync = require("prompt-sync");
-
 /* 
     FLUJO DE EJECUCIÓN
     1.  EL SISTEMA PREGUNTA SI DESEA REALIZAR UN REGISTRO O INICIAR SESION.
@@ -37,76 +35,22 @@ const PromptSync = require("prompt-sync");
 
 const prompt = require("prompt-sync")({sigint: true});
 
-class Registration {
-    storeTypes = new StoreTypes();
-
-    registeredStores = [];
-
-
-    constructor(email, password) {
-        this.email = email;
-        this.password = password;
+class StoreType {
+    
+    constructor(id, type) {
+        this.id = id;
+        this.type = type;
     }
 
-    emailValidate(emailToValidate) {
-        let emailValidate = false;
-
-        for(registeredStore of this.registeredStores) {
-            if(registeredStore.email === emailToValidate) {
-                emailValidate = true;
-            }
-        }
-
-        return emailValidate;
+    getStoresTypes() {
+        return  this.storesTypes;
     }
 
-    registration(registration) {
-        successfullyRegistration = false;
-        let emailValidated = this.emailValidate(registration.email);
-
-        if(emailValidated === false) {
-            this.registeredStores.push(registration);
-            successfullyRegistration = true;
-        }
-
-        return successfullyRegistration;
-
+    addStoreType(storeType) {
+        this.storesTypes.push(storeType);
     }
 
-    registrationForm() {
-        console.log(this.storeTypes[0].id);
-        console.log(`WELCOME TO THE REGISTRATION FORM`);
-        let storeName = prompt(`Enter the store name`);
-        let storeEmail = prompt(`Enter the store email`);
-        let storePassword = prompt(`Enter the store password`);
-        let storeType = prompt(`Choose your store type ${this.storeTypes[0].id}. ${this.storeTypes[0].type}$`);
-        console.log('ingresamos al formulario');
-        
 
-        /*let storeRegistrationData = {
-            storeName:storeName,
-            storeEmail:storeEmail,
-            storePassword:storePassword
-        };
-
-        let registrationForm = this.registration(storeRegistrationData);*/
-
-    }
-}
-
-class StoreTypes {
-    constructor() {
-        this.storeTypes = [
-            {
-                id:'1',
-                type:'Clothing'
-            },
-            {
-                id:'2',
-                type:'Pet'
-            }
-        ];
-    }
 }
 
 class Store {
@@ -211,17 +155,70 @@ Our Services: ${this.petServices}`;
     }
 }
 
-class MainRoute {
-    registration = new Registration();
+class Registration {
+    registeredStores = []; //DEBE ESTAR A NIVEL GLOBAL
 
-    mainRouteMenu() {
-        console.log('holi');
-        var menuOptions = prompt(`Welcome, digit the option that you prefer\n1.Register\n2.Login\n3.Exit `);
-        console.log(menuOptions);
+
+    constructor(email, password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    emailValidate(emailToValidate) {
+        let emailValidate = false;
+
+        for(registeredStore of this.registeredStores) {
+            if(registeredStore.email === emailToValidate) {
+                emailValidate = true;
+            }
+        }
+
+        return emailValidate;
+    }
+
+    registration(registration) {
+        successfullyRegistration = false;
+        let emailValidated = this.emailValidate(registration.email);
+
+        if(emailValidated === false) {
+            this.registeredStores.push(registration);
+            successfullyRegistration = true;
+        }
+
+        return successfullyRegistration;
+
+    }
+
+    registrationForm() {
+        console.log(storesTypes.getStoresTypes());
+        /*console.log(`WELCOME TO THE REGISTRATION FORM`);
+        let storeName = prompt(`Enter the store name`);
+        let storeEmail = prompt(`Enter the store email`);
+        let storePassword = prompt(`Enter the store password`);
+        let storeType = prompt(`Choose your store type ${this.storesTypes[0].id}. ${this.storesTypes[0].type}$`);
+        console.log('ingresamos al formulario');*/
+        
+
+        /*let storeRegistrationData = {
+            storeName:storeName,
+            storeEmail:storeEmail,
+            storePassword:storePassword
+        };
+
+        let registrationForm = this.registration(storeRegistrationData);*/
+
+    }
+}
+
+class MainRoute {
+
+    mainRouteMenu(storesTypes, registration) {
+        console.log(storesTypes.storesTypes);
+        let menuOptions = parseInt(prompt(`Welcome, digit the option that you prefer\n1.Register\n2.Login\n3.Exit `));
+
         switch(menuOptions) {
             case 1:
-                console.log('ingresamos al caso 1');
-                this.registration.registrationForm();
+                registration.registrationForm();
                 break;
             case 2: 
                 console.log('LOGIN');
@@ -243,8 +240,31 @@ class MainRoute {
 /*const mainRoute = new MainRoute();
 mainRoute.mainRouteMenu();*/
 
- const registration = new Registration();
- registration.registrationForm();
+/*const registration = new Registration();
+registration.registrationForm();*/
+
+
+//arrays a global level
+let storesTypes = [];
+
+
+//Build stores types
+const storeType = new StoreType();
+const clothingStoreType = new StoreType(1,'Clothing Store');
+const petStoreType = new StoreType(2,'Pet Store');
+// Add stores types in an array
+storeType.addStoreType(clothingStoreType);
+storeType.addStoreType(petStoreType);
+
+//instantiate object of a registration class
+const registration = new Registration();
+
+
+//Execute the main route
+const mainRoute = new MainRoute();
+console.log(storeType.getStoresTypes());
+mainRoute.mainRouteMenu(storeType.getStoresTypes(),);
+
 
 
 
