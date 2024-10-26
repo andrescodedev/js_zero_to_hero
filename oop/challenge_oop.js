@@ -35,67 +35,185 @@
 
 const prompt = require("prompt-sync")({sigint: true});
 
+class StoreAccount {
+    #storeName;
+    #storeEmail;
+    #storePassword;
+
+    constructor(storeName, storeEmail, storePassword) {
+        this.#storeName = storeName;
+        this.#storeEmail = storeEmail;
+        this.#storePassword = storePassword;
+    }
+
+    //GETTERS
+    get storeName() {
+        return this.#storeName;
+    }
+
+    get storeEmail() {
+        return this.#storeEmail;
+    }
+
+    get storePassword() {
+        return this.#storePassword;
+    }
+
+
+    //SETTERS
+    set storeName(newStoreName) {
+        //Condition
+        this.#storeName = newStoreName;
+    }
+
+    set storeEmail(newStoreEmail) {
+        //Condition
+        this.#storeEmail = newStoreEmail;
+    }
+
+    set storePassword(newStorePassword) {
+        //Condition
+        this.#storePassword = newStorePassword;
+    }
+}
+
+class SignUp extends StoreAccount {
+    #storeType;
+
+    constructor(storeName, storeEmail, storePassword, storeType) {
+        super(storeName, storeEmail, storePassword);
+        this.#storeType = storeType;
+    }
+
+    get storeType() {
+        return this.#storeType;
+    }
+
+    set storeType(newStoreType) {
+        //condition
+        this.#storeType = newStoreType;
+    }
+}
+
+class SignIn extends StoreAccount {
+
+    constructor(storeName, storeEmail, storePassword, storeType) {
+        super(storeName, storeEmail, storePassword);
+    }
+
+}
+
 class StoreType {
+
+    #id;
+    #type;
     
-    constructor(id, type) {
-        this.id = id;
-        this.type = type;
+    constructor(type) {
+       // this.#id = generateIds();
+        this.#type = type;
     }
 
-    getStoresTypes() {
-        return  this.storesTypes;
+    get id() {
+        return this.#id;
     }
 
-    addStoreType(storeType) {
-        this.storesTypes.push(storeType);
+    get type() {
+        return this.#type;
     }
 
+    set type(updateType) {
+        //condition
+        this.#type = updateType;
+    }
 
 }
 
 class Store {
 
-    constructor(name, email, password, phones, addresses, storeType) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phones = phones;
-        this.addresses = addresses;
+    #id;
+    #name;
+    #email;
+    #password;
+    #phones;
+    #addresses;
+    #isVirtual;
+    #storeType;
+
+
+    constructor(id, name, email, password, phones, addresses, isVirtual, storeType) {
+        //this.#id = generateIds();        
+        this.#name = name;
+        this.#email = email;
+        this.#password = password;
+        this.#phones = phones;
+        this.#addresses = addresses;
+        this.#isVirtual = isVirtual;
         this.storeType = storeType;
     }
 
-    getName() {
-        return this.name;
+    get id() {
+        return this.#id;
     }
 
-    getPhones() {
-        return this.phones;
+    get name() {
+        return this.#name;
     }
 
-    getAddresses() {
-        return this.addresses;
+    get email() {
+        return this.#email;
     }
 
-    getEmail() {
-        return this.email;
+    get password() {
+        return this.#password;
     }
 
-    getPassword() {
-        return this.password;
+    get phones() {
+        return this.#phones;
     }
 
-    getStoreType() {
-        return this.storeType;
+    get addresses() {
+        return this.#addresses;
     }
 
-    setPhones(phones) {
-        this.phones = phones;
+    get isVirtual() {
+        return this.#isVirtual;
     }
 
-    setAddresses(addresses) {
-        this.addresses = addresses;
+    get storeType() {
+        return this.#storeType;
+    }
+    
+    set name(newName) {
+        //condition
+        this.#name = newName;
     }
 
+    set email(newEmail) {
+        //condition and validation
+        this.#email = newEmail;
+    }
+
+    set password(newPassword) {
+        //condition and validation
+        this.#password = newPassword;
+    }
+
+    set phones(newPhones) {
+        //condition
+        this.#phones = newPhones;
+    }
+
+    set addresses(newAddresses) {
+        this.#addresses = newAddresses;
+    }
+
+    set isVirtual(newVirtualState) {
+        this.#isVirtual = newVirtualState;
+    }
+
+    set storeType(newStoreType) {
+        this.#storeType = newStoreType;
+    }
 
     storePresentation() {
         return `Store Name: ${this.name}\nAddress: ${this.addresses.address}

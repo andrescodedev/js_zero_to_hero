@@ -66,7 +66,7 @@ console.log(SubClass.notStaticMethod2());*/
   }
 */
 
-class ClassWithSIB {
+/*class ClassWithSIB {
   static property1 = 'value1';
   static property2;
   static {
@@ -77,5 +77,64 @@ class ClassWithSIB {
 
 console.log(ClassWithSIB.property1);
 console.log(ClassWithSIB.property2);
-console.log(ClassWithSIB.property3);
+console.log(ClassWithSIB.property3);*/
+
+
+/* 
+  ABSTRACTION
+*/
+
+class MaquinaDeCafe {
+  
+  constructor() {
+    if(new.target === MaquinaDeCafe) {
+      throw new Error('No se puede instanciar una clase abstracta');
+    }
+  }
+
+  // Metodo abstracto
+  seleccionarBebida() {
+    throw new Error('Este metodo debe ser implementado en la clase que hereda');
+  }
+
+  prepararBebida() {
+    console.log('Preparando la bebida');
+  }
+
+  servirBebida() {
+    console.log('Sirviendo el cafe en el vaso');
+  }
+
+  hacerCafe() {
+    this.seleccionarBebida();
+    this.prepararBebida();
+    this.servirBebida();
+  }
+}
+
+class ExpressoMachine extends MaquinaDeCafe {
+  
+  seleccionarBebida() {
+    console.log('Has seleccionado un Expresso');
+  }
+}
+
+class CapuccinoMachine extends MaquinaDeCafe {
+  seleccionarBebida() {
+    console.log('Has seleccionado un Capuccino');
+  }
+
+  prepararBebida() {
+    console.log('Realizando espuma');
+    super.prepararBebida();
+  }
+}
+
+const maquinaDeCafe = new MaquinaDeCafe();
+const expresso = new ExpressoMachine();
+const capuccino = new CapuccinoMachine();
+
+maquinaDeCafe.prepararBebida();
+expresso.seleccionarBebida();
+capuccino.seleccionarBebida();
   
