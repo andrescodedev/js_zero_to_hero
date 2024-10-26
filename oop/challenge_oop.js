@@ -33,7 +33,7 @@
     
 */
 
-const prompt = require("prompt-sync")({sigint: true});
+//const prompt = require("prompt-sync")({sigint: true});
 
 class StoreAccount {
     #storeName;
@@ -75,6 +75,18 @@ class StoreAccount {
         //Condition
         this.#storePassword = newStorePassword;
     }
+
+    emailValidate(emailToValidate) {
+        let emailValidate = false;
+
+        for(registeredStore of this.registeredStores) {
+            if(registeredStore.email === emailToValidate) {
+                emailValidate = true;
+            }
+        }
+
+        return emailValidate;
+    }
 }
 
 class SignUp extends StoreAccount {
@@ -93,6 +105,16 @@ class SignUp extends StoreAccount {
         //condition
         this.#storeType = newStoreType;
     }
+
+    validateStoreName(storeNameToValidate) {
+        let validateStoreName = true;
+
+        if(storeNameToValidate === '' || storeNameToValidate === undefined || storeNameToValidate === null) {
+            validateStoreName = false;
+        }
+
+        return validateStoreName;
+    }
 }
 
 class SignIn extends StoreAccount {
@@ -108,8 +130,9 @@ class StoreType {
     #id;
     #type;
     
-    constructor(type) {
+    constructor(id,type) {
        // this.#id = generateIds();
+        this.#id = id;
         this.#type = type;
     }
 
@@ -224,26 +247,29 @@ whatsapp: ${this.phones.whatsApp}`;
 
 class ClothingStore  extends Store {
 
-    constructor(name, email, password, phones, addresses, storeType, clothingType, sizes) {
-        super(name, email, password, phones, addresses, storeType);
-        this.clothingType = clothingType;
-        this.sizes = sizes;
+    #clothingTypes;
+    #clothingSizes;
+
+    constructor(id, name, email, password, phones, addresses, isVirtual, storeType, clothingType, clothingSizes) {
+        super(id, name, email, password, phones, addresses, isVirtual, storeType);
+        this.#clothingTypes = clothingType;
+        this.#clothingSizes = clothingSizes;
     }
 
-    getClothingType() {
-        return this.clothingType;
+    get clothingTypes() {
+        return this.#clothingTypes;
     }
 
-    getSizez() {
-        return this.sizes;
+    get clothingSizes() {
+        return this.#clothingSizes;
     }
 
-    setClothingType(clothingType) {
-        this.clothingType = clothingType;
+    set clothingTypes(newClothingType) {
+        this.#clothingTypes = newClothingType;
     }
 
-    setSizes(sizes) {
-        this.sizes = sizes;
+    set clothingSizes(newClothingSizes) {
+        this.#clothingSizes = newClothingSizes;
     }
 
     storePresentation() {
@@ -254,17 +280,19 @@ Clothing Type: ${this.clothingType}\nClothing Sizes: ${this.sizes}`;
 
 class PetStore extends Store {
 
-    constructor(name, email, password, phones, addresses, storeType, petServices) {
-        super(name, email, password, phones, addresses, storeType);
-        this.petServices = petServices;
+    #petServices;
+
+    constructor(id, name, email, password, phones, addresses, isVirtual, storeType, petServices) {
+        super(id, name, email, password, phones, addresses, isVirtual, storeType);
+        this.#petServices = petServices;
     }
 
-    getPetServices() {
-        return this.petServices;
+    get petServices() {
+        return this.#petServices;
     }
 
-    setPetServices(petServices) {
-        this.petServices = petServices;
+    set petServices(newPetServices) {
+        this.#petServices = newPetServices;
     }
 
     storePresentation() {
@@ -273,115 +301,44 @@ Our Services: ${this.petServices}`;
     }
 }
 
-class Registration {
-    registeredStores = []; //DEBE ESTAR A NIVEL GLOBAL
+class Utilities {
+
+}
+
+class DataBases {
+    static storesTypesDB = [];
+    static petStoresDB = [];
+    static clothingStoresDB = [];
+    static storesDB = [];
+    static registeredStoresDB = [];
+}
+
+function main() {
+    //Instantiate objects of stores types
+    const clothingStoreType = new StoreType('01','Clothing');
+    const petStoreType      = new StoreType('02','Pet');
+
+    //Add stores types to databases
+    DataBases.storesTypesDB.push(clothingStoreType);
+    DataBases.storesTypesDB.push(petStoreType);
+
+    //Instantiate SignUp object
+    const signUp = new SignUp('Valle perruno','perruno@gmail.com','perruno123',petStoreType);
+    let validateStoreName =  signUp.validateStoreName(signUp.storeName);
 
 
-    constructor(email, password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    emailValidate(emailToValidate) {
-        let emailValidate = false;
-
-        for(registeredStore of this.registeredStores) {
-            if(registeredStore.email === emailToValidate) {
-                emailValidate = true;
-            }
-        }
-
-        return emailValidate;
-    }
-
-    registration(registration) {
-        successfullyRegistration = false;
-        let emailValidated = this.emailValidate(registration.email);
-
-        if(emailValidated === false) {
-            this.registeredStores.push(registration);
-            successfullyRegistration = true;
-        }
-
-        return successfullyRegistration;
-
-    }
-
-    registrationForm() {
-        console.log(storesTypes.getStoresTypes());
-        /*console.log(`WELCOME TO THE REGISTRATION FORM`);
-        let storeName = prompt(`Enter the store name`);
-        let storeEmail = prompt(`Enter the store email`);
-        let storePassword = prompt(`Enter the store password`);
-        let storeType = prompt(`Choose your store type ${this.storesTypes[0].id}. ${this.storesTypes[0].type}$`);
-        console.log('ingresamos al formulario');*/
-        
-
-        /*let storeRegistrationData = {
-            storeName:storeName,
-            storeEmail:storeEmail,
-            storePassword:storePassword
-        };
-
-        let registrationForm = this.registration(storeRegistrationData);*/
-
+    //NECESITO COLOCAR ESTE METODO EN SIGNUP
+    if(validateStoreName === false) {
+        console.log('The store name field is required');
+    } else {
+        DataBases.registeredStoresDB.push(signUp);
+        console.log('Register Successfully');
     }
 }
 
-class MainRoute {
-
-    mainRouteMenu(storesTypes, registration) {
-        console.log(storesTypes.storesTypes);
-        let menuOptions = parseInt(prompt(`Welcome, digit the option that you prefer\n1.Register\n2.Login\n3.Exit `));
-
-        switch(menuOptions) {
-            case 1:
-                registration.registrationForm();
-                break;
-            case 2: 
-                console.log('LOGIN');
-                break;
-            case 3:
-                console.log('EXIT');
-                break;
-            default:
-                console.log('The option is incorrect');
-                
-        }
-    }
-    
-    consolePrint(store) {
-        console.log(store.storePresentation());
-    }
-}
-
-/*const mainRoute = new MainRoute();
-mainRoute.mainRouteMenu();*/
-
-/*const registration = new Registration();
-registration.registrationForm();*/
+main();
 
 
-//arrays a global level
-let storesTypes = [];
-
-
-//Build stores types
-const storeType = new StoreType();
-const clothingStoreType = new StoreType(1,'Clothing Store');
-const petStoreType = new StoreType(2,'Pet Store');
-// Add stores types in an array
-storeType.addStoreType(clothingStoreType);
-storeType.addStoreType(petStoreType);
-
-//instantiate object of a registration class
-const registration = new Registration();
-
-
-//Execute the main route
-const mainRoute = new MainRoute();
-console.log(storeType.getStoresTypes());
-mainRoute.mainRouteMenu(storeType.getStoresTypes(),);
 
 
 
