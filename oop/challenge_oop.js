@@ -116,6 +116,8 @@ class StoreAccount {
 class SignUp extends StoreAccount {
     #storeType;
 
+    static signUpSuccess = false;
+
     constructor(storeName, storeEmail, storePassword, storeType) {
         super(storeName, storeEmail, storePassword);
         this.#storeType = storeType;
@@ -141,6 +143,7 @@ class SignUp extends StoreAccount {
     }
 
     signUpStore(signUpStore) {
+
         let validateStoreName = this.#validateStoreName(signUpStore.storeName);
         let validateStoreEmail = this.validateStoreEmail(signUpStore.storeEmail);
         let validateStorePassword = this.validateStorePassword(signUpStore.storePassword);
@@ -159,6 +162,7 @@ Please, change the email for the register`;
             console.log(registerMessage);
         } else {
             DataBases.registeredStoresDB.push(signUpStore);
+            SignUp.signUpSuccess = true;
             console.log('Account created Successfully');
         }
     }
@@ -286,7 +290,8 @@ class Store {
     }
 
     storePresentation() {
-        return `Store Name: ${this.name}\nAddress: ${this.addresses.address}
+        return `WELCOME, THIS IS YOUR PROFILE
+Store Name: ${this.name}\nAddress: ${this.addresses.address}
 District: ${this.addresses.district}\nPhone: ${this.phones.mobilePhone}
 whatsapp: ${this.phones.whatsApp}`;
     }
@@ -361,6 +366,7 @@ class DataBases {
 }
 
 function main() {
+
     //Instantiate objects of stores types
     const clothingStoreType = new StoreType('01', 'Clothing');
     const petStoreType = new StoreType('02', 'Pet');
@@ -374,9 +380,35 @@ function main() {
     const signUp2 = new SignUp('Feria del calzado', 'feriadelcalzado@gmail.com', 'calzado258', clothingStoreType);
     const signUp3 = new SignUp('Perruno Store', 'perruno@gmail.com', 'perrunostore41', petStoreType);
 
-    signUp1.signUpStore(signUp1);
     signUp2.signUpStore(signUp2);
-    signUp3.signUpStore(signUp3);
+    
+    if(SignUp.signUpSuccess) {
+        console.log('Please, enter the another information to profile complete');
+        console.log(signUp2.storeType.type);
+
+        switch(signUp2.storeType.type) {
+            case 'Clothing':
+                const clothingStore = new ClothingStore('01',signUp2.storeName,signUp2.storeEmail,signUp2.storePassword,{phone:'3154266363',whatsapp:'3147899696'},'calle 1',true,signUp2.storeType.type,'Deportiva',['s','m','l']);
+                console.log(clothingStore.storePresentation());
+                break;
+            case 'Pet':
+                const petStore = new PetStore();
+                petStore.storePresentation();
+        }
+    } 
+    
+    
+    
+    
+    
+    
+    //signUp2.signUpStore(signUp2);
+    //signUp3.signUpStore(signUp3);
+
+
+
+    
+
 
 
 }
