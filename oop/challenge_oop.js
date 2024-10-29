@@ -169,9 +169,44 @@ Please, change the email for the register`;
 }
 
 class SignIn extends StoreAccount {
+    static verifyAccount = false;
+    static verifiedAccount = {};
 
-    constructor(storeName, storeEmail, storePassword, storeType) {
-        super(storeName, storeEmail, storePassword);
+    constructor(storeEmail, storePassword) {
+        super(null, storeEmail, storePassword);
+    }
+
+    #verifyAccount(storeEmail, storePassword) {
+        let store = {};
+
+        for (store of DataBases.storesDB) {
+            if (store.email === storeEmail && store.password === storePassword) {
+                SignIn.verifyAccount = true;
+                SignIn.verifiedAccount = store;
+                break;
+            }
+        }
+    }
+
+    signInStore(signInStore) {
+
+        let validateStoreEmail = this.validateStoreEmail(signInStore.storeEmail);
+        let validateStorePassword = this.validateStorePassword(signInStore.storePassword);
+
+
+        if (validateStoreEmail === false) {
+            console.log('You must enter a valid email ');
+        } else if (validateStorePassword === false) {
+            console.log('The password field must not have blanck spaces and it must have 5 or more characters');
+        } else {
+            this.#verifyAccount(signInStore.storeEmail, signInStore.storePassword);
+
+            if (SignIn.verifyAccount) {
+                console.log(SignIn.verifiedAccount.storePresentation());
+            } else {
+                console.log(`Sorry, the account doesn't exist. Please, create an account`);
+            }
+        }
     }
 
 }
@@ -215,7 +250,8 @@ class Store {
 
 
     constructor(id, name, email, password, phones, addresses, isVirtual, storeType) {
-        //this.#id = generateIds();        
+        //this.#id = generateIds();
+        this.#id = id;
         this.#name = name;
         this.#email = email;
         this.#password = password;
@@ -291,9 +327,10 @@ class Store {
 
     storePresentation() {
         return `WELCOME, THIS IS YOUR PROFILE
-Store Name: ${this.name}\nAddress: ${this.addresses.address}
-District: ${this.addresses.district}\nPhone: ${this.phones.mobilePhone}
-whatsapp: ${this.phones.whatsApp}`;
+Store Name: ${this.name}\nEmail: ${this.email}
+Address: ${this.addresses.address}
+District: ${this.addresses.district}\nPhone: ${this.phones.phone}
+whatsapp: ${this.phones.whatsapp}`;
     }
 }
 
@@ -326,7 +363,7 @@ class ClothingStore extends Store {
 
     storePresentation() {
         return `${super.storePresentation()}
-Clothing Type: ${this.clothingType}\nClothing Sizes: ${this.sizes}`;
+Clothing Type: ${this.clothingTypes}\nClothing Sizes: ${this.clothingSizes}`;
     }
 }
 
@@ -365,7 +402,7 @@ class DataBases {
     static registeredStoresDB = [];
 }
 
-function main() {
+function signUpProcess() {
 
     //Instantiate objects of stores types
     const clothingStoreType = new StoreType('01', 'Clothing');
@@ -376,44 +413,48 @@ function main() {
     DataBases.storesTypesDB.push(petStoreType);
 
     //Instantiate SignUp object
-    const signUp1 = new SignUp('Valle Perruno', 'perruno@gmail.com', 'perruno123', petStoreType);
-    const signUp2 = new SignUp('Feria del calzado', 'feriadelcalzado@gmail.com', 'calzado258', clothingStoreType);
-    const signUp3 = new SignUp('Perruno Store', 'perruno@gmail.com', 'perrunostore41', petStoreType);
+    //const signUp1 = new SignUp('Valle Perruno', 'perruno@gmail.com', 'perruno123', petStoreType);
+    const signUp = new SignUp('Valle Perruno', 'perruno@gmail.com', 'perruno123', petStoreType);
 
-    signUp2.signUpStore(signUp2);
-    
-    if(SignUp.signUpSuccess) {
+    signUp.signUpStore(signUp);
+
+    if (SignUp.signUpSuccess) {
         console.log('Please, enter the another information to profile complete');
-        console.log(signUp2.storeType.type);
+        console.log(signUp.storeType.type);
 
-        switch(signUp2.storeType.type) {
+        switch (signUp.storeType.type) {
             case 'Clothing':
-                const clothingStore = new ClothingStore('01',signUp2.storeName,signUp2.storeEmail,signUp2.storePassword,{phone:'3154266363',whatsapp:'3147899696'},'calle 1',true,signUp2.storeType.type,'Deportiva',['s','m','l']);
+                const clothingStore = new ClothingStore('01', signUp.storeName, signUp.storeEmail, signUp.storePassword, { phone: '3154266363', whatsapp: '3147899696' }, { address: 'calle 1', district: 'Estambul' }, true, signUp.storeType.type, 'Deportiva', ['s', 'm', 'l']);
                 console.log(clothingStore.storePresentation());
                 break;
             case 'Pet':
-                const petStore = new PetStore();
-                petStore.storePresentation();
+                const petStore = new PetStore('100', signUp.storeName, signUp.storeEmail, signUp.storePassword, { phone: '3154266363', whatsapp: '3147899696' }, { address: 'carrera 15', district: 'Popular' }, true, signUp.storeType.type, ['Peluquería', 'Baño', 'paticure']);
+                console.log(petStore.storePresentation());
         }
-    } 
-    
-    
-    
-    
-    
-    
-    //signUp2.signUpStore(signUp2);
-    //signUp3.signUpStore(signUp3);
+    }
 
+}
 
+function signInProcess() {
+    //Instantiate objects of stores types
+    const clothingStoreType = new StoreType('01', 'Clothing');
+    const petStoreType = new StoreType('02', 'Pet');
 
-    
+    const clothingStore = new ClothingStore('01', 'Blue inc', 'blueinc@gmail.com', 'blueinc456', { phone: '3154266363', whatsapp: '3147899696' }, { address: 'calle 1', district: 'Estambul' }, true, clothingStoreType.type, 'Deportiva', ['s', 'm', 'l']);
+    const petStore = new PetStore('100', 'dogs and cats', 'dogsandcats@gmail.com', 'dog1andcat2', { phone: '3154266363', whatsapp: '3147899696' }, { address: 'carrera 15', district: 'Popular' }, true, petStoreType.type, ['Peluquería', 'Baño', 'paticure']);
+
+    DataBases.storesDB.push(clothingStore);
+    DataBases.storesDB.push(petStore);
+
+    const signIn = new SignIn('dogsandcats@gmail.com', 'dog1andcat2');
+    signIn.signInStore(signIn);
 
 
 
 }
 
-main();
+//signUpProcess();
+signInProcess();
 
 
 
